@@ -1,0 +1,46 @@
+services:
+  postgres_complaint:
+    image: postgres:16
+    container_name: complaint-postgres
+    restart: unless-stopped
+    networks:
+      - internal_net
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - complaint_pgdata:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5435:5432"
+
+  complaint-service:
+    build: .
+    container_name: complaint-service
+    restart: unless-stopped
+    networks:
+      - shared_network
+      - internal_net
+    depends_on:
+      - postgres_complaint
+    environment:
+      DB_HOST: postgres_complaint
+      DB_PORT: 5432
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+      DB_NAME: ${POSTGRES_DB}
+      DB_SSLMODE: disable
+      SERVICE_TOKEN: ${SERVICE_TOKEN}
+    volumes:
+      - ./keys/public.pem:/app/keys/public.pem:ro
+    ports:
+      - "8083:8080"
+
+volumes:
+  complaint_pgdata:
+
+networks:
+  internal_net:
+  shared_network:
+    external: true
