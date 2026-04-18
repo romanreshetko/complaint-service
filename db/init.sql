@@ -3,15 +3,15 @@ CREATE TABLE review_complaints (
     review_id  BIGINT    NOT NULL,
     author_id  BIGINT    NOT NULL,
     reason     TEXT      NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL
 );
 
-CREATE TABLE review_complaints (
+CREATE TABLE comment_complaints (
     id         BIGSERIAL NOT NULL PRIMARY KEY,
     comment_id BIGINT    NOT NULL,
     author_id  BIGINT    NOT NULL,
     reason     TEXT      NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL
 );
 
 CREATE TABLE moderation_logs (
