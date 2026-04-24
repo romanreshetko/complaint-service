@@ -23,7 +23,7 @@ func UpdateReviewStatus(reviewID int64, status string) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	baseURL := "http://review-servise:8080/review/status/update"
+	baseURL := "http://review-service:8080/review/status/update"
 	params := url.Values{}
 	params.Add("review_id", strconv.FormatInt(reviewID, 10))
 	params.Add("status", status)

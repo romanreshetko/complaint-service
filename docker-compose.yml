@@ -32,6 +32,10 @@ services:
       DB_NAME: ${POSTGRES_DB}
       DB_SSLMODE: disable
       SERVICE_TOKEN: ${SERVICE_TOKEN}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
     volumes:
       - ./keys/public.pem:/app/keys/public.pem:ro
     ports:

@@ -114,22 +114,22 @@ func DeleteCommentComplaints(db *sql.DB, commentID int64) error {
 	return nil
 }
 
-func GetReviewIDByComplaintID(db *sql.DB, complaintID int64) (int64, error) {
-	var id int64
+func GetReviewAndUserIDByComplaintID(db *sql.DB, complaintID int64) (int64, int64, error) {
+	var reviewID, authorID int64
 	err := db.QueryRow(`
-		SELECT review_id
+		SELECT review_id, author_id
 		FROM review_complaints
 		WHERE id = $1
-`, complaintID).Scan(&id)
+`, complaintID).Scan(&reviewID, &authorID)
 
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
-			return 0, errors.New("complaint not found")
+			return 0, 0, errors.New("complaint not found")
 		}
-		return 0, err
+		return 0, 0, err
 	}
 
-	return id, nil
+	return reviewID, authorID, nil
 }
 
 func GetCommentIDByComplaintID(db *sql.DB, complaintID int64) (int64, error) {

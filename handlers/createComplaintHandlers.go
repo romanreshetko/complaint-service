@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"complaint-service/mail"
 	"complaint-service/models"
 	"complaint-service/repository"
 	"database/sql"
@@ -9,11 +10,12 @@ import (
 )
 
 type Handler struct {
-	db *sql.DB
+	db     *sql.DB
+	mailer *mail.Mailer
 }
 
-func New(db *sql.DB) *Handler {
-	return &Handler{db}
+func New(db *sql.DB, mailer *mail.Mailer) *Handler {
+	return &Handler{db, mailer}
 }
 
 func (h *Handler) CreateReviewComplaintHandler(w http.ResponseWriter, r *http.Request) {

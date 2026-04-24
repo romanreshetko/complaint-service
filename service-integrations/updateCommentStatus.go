@@ -22,7 +22,7 @@ func UpdateCommentStatus(commentID int64, status string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	baseURL := "http://comment-servise:8080/comment/status/update"
+	baseURL := "http://comment-service:8080/comment/status/update"
 	params := url.Values{}
 	params.Add("comment_id", strconv.FormatInt(commentID, 10))
 	params.Add("status", status)
