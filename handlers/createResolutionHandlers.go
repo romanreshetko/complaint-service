@@ -54,7 +54,12 @@ func (h *Handler) CreateReviewResolutionHandler(w http.ResponseWriter, r *http.R
 		return
 	}
 
-	go repository.InsertModerationLog(h.db, claims.UserID, reviewID, "review", resolution)
+	go func() {
+		err := repository.InsertModerationLog(h.db, claims.UserID, reviewID, "review", resolution)
+		if err != nil {
+			log.Printf("error inserting review log: %v", err)
+		}
+	}()
 
 	go func() {
 		err := mail.SendBlockNotification(h.mailer, authorID)
@@ -111,7 +116,12 @@ func (h *Handler) CreateCommentResolutionHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
-	go repository.InsertModerationLog(h.db, claims.UserID, commentID, "comment", resolution)
+	go func() {
+		err := repository.InsertModerationLog(h.db, claims.UserID, commentID, "comment", resolution)
+		if err != nil {
+			log.Printf("error inserting review log: %v", err)
+		}
+	}()
 
 	w.WriteHeader(http.StatusOK)
 }

@@ -50,3 +50,9 @@ func SendBlockNotification(mailer *Mailer, userID int64) error {
 
 	return mailer.SendMail(userInfo.Email, "Уведомление о блокировке", body)
 }
+
+func SendAdminModerationNotification(mailer *Mailer) error {
+	body := "В базе данных более 5 записей об ошибках модерации. Возможно, есть проблемы с внешним сервисом."
+
+	return mailer.SendMail("luminastik@yandex.ru", "Уведомление об ошибках модерации", body)
+}

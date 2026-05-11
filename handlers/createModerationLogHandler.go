@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"complaint-service/models"
+	"complaint-service/monitoring"
 	"complaint-service/repository"
 	"encoding/json"
 	"net/http"
@@ -29,7 +30,15 @@ func (h *Handler) CreateModerationLogHandler(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	go repository.InsertModerationLog(h.db, 0, req.ContentID, req.ContentType, req.Result)
+	err := repository.InsertModerationLog(h.db, 0, req.ContentID, req.ContentType, req.Result)
+	if err != nil {
+		http.Error(w, "internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	if req.Result == "moderation_error" {
+		go monitoring.CheckModerationError(h.db, h.mailer)
+	}
 
 	w.WriteHeader(http.StatusOK)
 }
